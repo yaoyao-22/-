@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            margin: 0 auto;
+            padding: 0px;
+            font-size: 12px;
+            text-align: center;
+            background-color: #c30230;
+            background: url("images/bg.gif") repeat center 36px;
+
+
+        }
+
+        /*便签最外面的大box*/
+        #content {
+            width: 960px;
+            height: 627px;
+            margin: 0 auto;
+            background: url("images/content_bg.jpg") no-repeat left top;
+        }
+
+        /*便签的贴身壳*/
+        #content .tip1, #content .tip2, #content .tip3, #content .tip4, #content .tip5, #content .tip6, #content .tip7, #content .tip8 {
+            width: 227px; /*不设置高度，由内容撑开*/
+            position: absolute; /*在父亲content中浮起*/
+            left: 200px;
+            top: 100px;
+        }
+
+        /*便签头部*/
+        #content .tip1 .tip_h {
+            background: url("images/tip1_h.gif") no-repeat left top;
+        }
+
+        #content .tip1 .tip_h, #content .tip2 .tip_h, #content .tip3 .tip_h, #content .tip4 .tip_h, #content .tip5 .tip_h, #content .tip6 .tip_h, #content .tip7 .tip_h, #content .tip8 .tip_h {
+            width: 227px;
+            height: 23px;
+            padding-top: 45px;
+            text-align: center;
+            cursor: move;
+        }
+
+        /*便签的内容*/
+        #content .tip1 .tip_c {
+            background: url("images/tip1_c.gif") repeat-y;
+        }
+
+        #content .tip1 .tip_c, #content .tip2 .tip_c, #content .tip3 .tip_c, #content .tip4 .tip_c, #content .tip5 .tip_c, #content .tip6 .tip_c, #content .tip7 .tip_c, #content .tip8 .tip_c {
+            width: 200px;
+            min-height: 40px; /*最小高度，最小也不能低于这个*/
+            max-height: 160px; /*最大高度，最大也不能超过这个*/
+            padding-left: 12px;
+            padding-right: 15px;
+            text-align: left;
+            line-height: 20px;
+            word-wrap: break-word; /*允许长单词或 URL 地址换行到下一行*/
+            word-break: break-all; /*在恰当的断字点进行换行*/
+            overflow: hidden; /*溢出隐藏*/
+        }
+
+        /*便签尾部*/
+        #content .tip1 .tip_f {
+            background: url("images/tip1_f.gif") no-repeat left top;
+        }
+
+        #content .tip1 .tip_f, #content .tip2 .tip_f, #content .tip3 .tip_f, #content .tip4 .tip_f, #content .tip5 .tip_f, #content .tip6 .tip_f, #content .tip7 .tip_f, #content .tip8 .tip_f {
+            width: 227px;
+            height: 53px;
+            padding-top: 20px;
+        }
+
+        /*便签的 x 关闭按钮*/
+        #content .close, #content .close2 {
+            float: left;
+            font-size: 12px;
+            color: #000;
+            cursor: pointer;
+        }
+
+        /*清除浮动，给包围  浮动的层 添加清除浮动样式*/
+        /*空的div ，利用css提高的clear:both清除浮动，让父级div能自动获取到高度*/
+        .crl {
+            clear: both;
+            overflow: hidden;
+            display: block;
+            height: 0px;
+        }
+
+        /*便签头部 第几条+时间*/
+        #content .num {
+            width: 195px;
+            float: left;
+            padding-left: 7px;
+        }
+
+        /* 便签的下方棒棒糖图标*/
+        #content .icon {
+            float: left;
+            width: 35px;
+            height: 35px;
+            padding-left: 15px;
+            text-align: center;
+        }
+
+        /* 便签下方的名字*/
+        #content .name {
+            float: right;
+            color: #C0F;
+            font-size: 14px;
+            line-height: 35px;
+            text-align: right;
+            padding-right: 15px;
+        }
+    </style>
+</head>
+<body>
+<div id="content"></div>
+<script src="common.js"></script>
+<script>
+    //1.把便签的内容，这个对象，放到一个数组中
+    var messages = [
+        {"id": 1, "name": "二二君", "content": "今晚是大夜，每天都是努力工作的我！", "time": "2019-06-01 00:00:00"},
+        {"id": 2, "name": "shi丹娜", "content": "瑶瑶什么时候来深圳，我打算和她一起吃喝玩耍，努力工作生活！", "time": "2019-07-20 09:32:00"},
+        {"id": 3, "name": "烤思琪", "content": "我的子子异，今天见到他本人了，可是,呜呜……没能多看他几眼", "time": "2019-07-13 22:18:00"},
+        {"id": 4, "name": "老大", "content": "自己坚定下来才行，看到比自己优秀的人那么多，不努力怎么行。", "time": "2019-06-25 19:35:00"},
+        {"id": 5, "name": "蓉蓉蟹蟹", "content": "今天我要煮什么菜，我要吃什么呢？啊好想躺个三天三夜!!", "time": "2019-08-08 08:08:00"},
+        {"id": 6, "name": "六子", "content": "成为自己的王者，过上自己想要的生活。", "time": "2019-07-20 06:06:00"},
+        {"id": 7, "name": "小小小佳玉", "content": "这是我的小熊，每天都要好好对待他~槽糕！忘记给他整理衣服啦！！!", "time": "2019-07-15 14:35:00"},
+        {"id": 8, "name": "二姐姐", "content": "夜宵！妹妹昨天也是好好读书，开心~", "time": "2019-06-16 18:08:00"}
+    ];
+
+    //2.获取祝福墙---content
+    var content = my$("content");
+    //3.根据数组的长度创建div,并追加到content中  (每个便签的贴身外壳)
+    for (var i = 0; i < messages.length; i++) {
+        //遍历同时,保存每个对象(方便点属性)
+        var note = messages[i];
+        //创建div
+        var dvObj = document.createElement("div");
+        //追加到content
+        content.appendChild(dvObj);
+        //设置好每个div的id和样式
+        dvObj.id = "cc" + i;
+        dvObj.className = "tip1";
+        //遍历时，对应设置每个便签的文本内容
+        dvObj.innerHTML = "<div class='tip_h' title='双击关闭纸条'>" +
+            "<div class='num'>第["+note.id+"]条" + note.time + "</div>" +
+            "<div class='close' title='关闭纸条'>x</div>" +
+            "<div class='crl'></div>" +
+            "</div>" +
+            "<div class='tip_c'>" + note.content + "</div>" +
+            "<div class='tip_f'>" +
+            "<div class='icon'>" +
+            "<img src='images/bpic_1.gif'/>" +
+            "</div>" +
+            "<div class='name'>" + note.name + "</div>" +
+            "</div>";
+        //设置每个便签div的left和top属性值（随机）
+        var x=parseInt(Math.random()*600+300);
+        var y=parseInt(Math.random()*300+100);
+        dvObj.style.left=x+"px";
+        dvObj.style.top=y+"px";
+
+        //点击关闭按钮，清除便签   每个便签的关闭按钮x  通过className获取到的元素，一定是个伪数组
+        dvObj.getElementsByClassName("close")[0].onclick=function () {
+            this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);//content 移除 便签dvObj
+        };
+
+        //双击便签头部，清除便签  ondblclick当元素被双击时执行Javascript代码
+        dvObj.getElementsByClassName("tip_h")[0].ondblclick=function () {
+            this.parentNode.parentNode.removeChild(this.parentNode);
+        };
+
+        //点击便签，改变层级
+        dvObj.onclick=clickHandle;
+    }
+
+    //默认层级为0
+    var zIndex=0;
+    //命名函数
+    function clickHandle() {
+        zIndex++;
+        this.style.zIndex=zIndex;
+    }
+</script>
+</body>
+</html>
